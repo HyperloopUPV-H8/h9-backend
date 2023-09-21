@@ -5,12 +5,16 @@ import (
 	"io"
 )
 
+// A Pipeline takes a binary input and turns it into usable data and
+// vice versa.
 type Pipeline interface {
 	ReadPacket(id PacketId, reader io.Reader) (int, error)
 	WritePacket(packet Packet, writer io.Writer) (int, error)
 	SetOutput(output chan<- Packet)
 }
 
+// Kind of messages a pipeline produces. Used to identify each packet
+// with a pipeline.
 type Kind string
 
 const (
@@ -23,12 +27,23 @@ const (
 	Order      Kind = "order"
 )
 
+// Mux is a packet multiplexer for chosing the appropiate pipe
+// both when encoding and decoding.
+//
+// When decoding, the mux decodes the packet ID and uses it to
+// determine the pipe. On the other hand, when encoding, the mux
+// uses the already provided packet id.
 type Mux struct {
 	pipes     map[Kind]Pipeline
 	idToKind  map[PacketId]Kind
 	byteOrder binary.ByteOrder
 }
 
+// Read packets from the reader until the source is drained.
+// The source must provide valid packets, each starting with
+// the ID as an uint16. After reading the ID, the pipe is responsible
+// of only taking as much as it needs to read it. Failing to read
+// exactly the packet data will cause further reads to return garbage
 func (mux *Mux) ReadFrom(reader io.Reader) (int64, error) {
 	total_read := 0
 
