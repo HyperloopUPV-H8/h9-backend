@@ -1,7 +1,7 @@
 package pipeline
 
-type PackageId uint16
+type PacketId uint16
 
-type Package interface {
-	Id() PackageId
+type Packet interface {
+	Id() PacketId
 }
