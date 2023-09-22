@@ -1,6 +1,7 @@
 package data
 
 import (
+	"encoding/binary"
 	"io"
 
 	"github.com/HyperloopUPV-H8/h9-backend/pkg/pipeline"
@@ -8,7 +9,9 @@ import (
 
 type Pipe struct {
 	packetStructures map[pipeline.PacketId]PacketStructure
+	enums            map[ValueName]EnumDescriptor
 	output           chan<- pipeline.Packet
+	byteOrder        binary.ByteOrder
 }
 
 func (pipe *Pipe) SetOutput(output chan<- pipeline.Packet) { pipe.output = output }
@@ -19,16 +22,18 @@ func (pipe *Pipe) ReadPacket(id pipeline.PacketId, reader io.Reader) (int, error
 		return 0, ErrIdNotFound(id)
 	}
 
-	total_read := 0
+	totalRead := 0
 	packet := Packet{id: id, values: make(map[ValueName]Value, len(structure))}
 	for _, descriptor := range structure {
-		value, n, err := decodeNext(descriptor, reader)
-		total_read += n
+		value, n, err := pipe.decodeNext(descriptor, reader)
+		totalRead += n
 		if err != nil {
-			return total_read, err
+			return totalRead, err
 		}
 		packet.values[descriptor.Name] = value
 	}
 
-	return total_read, nil
+	pipe.output <- packet
+
+	return totalRead, nil
 }
