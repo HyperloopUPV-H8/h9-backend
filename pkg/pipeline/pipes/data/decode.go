@@ -5,46 +5,46 @@ import (
 	"io"
 )
 
-func (pipe *Pipe) decodeNext(descriptor ValueDescriptor, reader io.Reader) (val Value, n int, err error) {
+func (codec *Codec) decodeNext(descriptor ValueDescriptor, reader io.Reader) (val Value, n int, err error) {
 	switch descriptor.Type {
 	case Uint8:
-		val, n, err = decodeNextValue[uint8](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[uint8](reader, codec.byteOrder)
 		val = float64(val.(uint8))
 	case Uint16:
-		val, n, err = decodeNextValue[uint16](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[uint16](reader, codec.byteOrder)
 		val = float64(val.(uint16))
 	case Uint32:
-		val, n, err = decodeNextValue[uint32](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[uint32](reader, codec.byteOrder)
 		val = float64(val.(uint32))
 	case Uint64:
-		val, n, err = decodeNextValue[uint64](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[uint64](reader, codec.byteOrder)
 		val = float64(val.(uint64))
 	case Int8:
-		val, n, err = decodeNextValue[int8](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[int8](reader, codec.byteOrder)
 		val = float64(val.(int8))
 	case Int16:
-		val, n, err = decodeNextValue[int16](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[int16](reader, codec.byteOrder)
 		val = float64(val.(int16))
 	case Int32:
-		val, n, err = decodeNextValue[int32](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[int32](reader, codec.byteOrder)
 		val = float64(val.(int32))
 	case Int64:
-		val, n, err = decodeNextValue[int64](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[int64](reader, codec.byteOrder)
 		val = float64(val.(int64))
 	case Float32:
-		val, n, err = decodeNextValue[float32](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[float32](reader, codec.byteOrder)
 		val = float64(val.(float32))
 	case Float64:
-		val, n, err = decodeNextValue[float64](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[float64](reader, codec.byteOrder)
 	case Bool:
-		val, n, err = decodeNextValue[bool](reader, pipe.byteOrder)
+		val, n, err = decodeNextValue[bool](reader, codec.byteOrder)
 	case Enum:
-		enumDescriptor, ok := pipe.enums[descriptor.Name]
+		enumDescriptor, ok := codec.enums[descriptor.Name]
 		if !ok {
 			err = ErrEnumNotFound(descriptor.Name)
 		}
 		var variant byte
-		variant, n, err = decodeNextValue[byte](reader, pipe.byteOrder)
+		variant, n, err = decodeNextValue[byte](reader, codec.byteOrder)
 		val = enumDescriptor[variant]
 	default:
 		err = ErrInvalidType(descriptor.Type)

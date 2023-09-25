@@ -45,26 +45,26 @@ type Mux struct {
 // of only taking as much as it needs to read it. Failing to read
 // exactly the packet data will cause further reads to return garbage
 func (mux *Mux) ReadFrom(reader io.Reader) (int64, error) {
-	total_read := 0
+	totalRead := 0
 
 	var err error = nil
 	var n int
 	for err == nil {
 		n, err = mux.readNextPacket(reader)
-		total_read += n
+		totalRead += n
 	}
 
-	return int64(total_read), err
+	return int64(totalRead), err
 }
 
 func (mux *Mux) readNextPacket(reader io.Reader) (int, error) {
-	total_read := 0
+	totalRead := 0
 
 	idBuf := make([]byte, 2)
 	n, err := reader.Read(idBuf)
-	total_read += n
+	totalRead += n
 	if err != nil {
-		return total_read, err
+		return totalRead, err
 	}
 
 	nextId := PacketId(mux.byteOrder.Uint16(idBuf))
@@ -73,9 +73,9 @@ func (mux *Mux) readNextPacket(reader io.Reader) (int, error) {
 	pipe := mux.pipes[kind]
 
 	n, err = pipe.ReadPacket(nextId, reader)
-	total_read += n
+	totalRead += n
 
-	return total_read, err
+	return totalRead, err
 }
 
 func (mux *Mux) WritePacket(packet Packet, writer io.Writer) (int, error) {
