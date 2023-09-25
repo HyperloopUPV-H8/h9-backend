@@ -10,7 +10,7 @@ import (
 // ADE to decode and encode the packets. After this, it also converts the units of
 // numeric values to those of the vehicle or the display./
 type Pipe struct {
-	codec  Codec
+	codec  *Codec
 	output chan<- pipeline.Packet
 }
 
@@ -27,4 +27,13 @@ func (pipe *Pipe) ReadPacket(id pipeline.PacketId, reader io.Reader) (int, error
 	pipe.output <- packet
 
 	return totalRead, nil
+}
+
+func (pipe *Pipe) WritePacket(packet pipeline.Packet, writer io.Writer) (int, error) {
+	dataPacket, ok := packet.(Packet)
+	if !ok {
+		return 0, ErrInvalidPacketType{packet}
+	}
+
+	return pipe.codec.Encode(dataPacket, writer)
 }

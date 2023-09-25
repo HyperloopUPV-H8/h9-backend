@@ -37,3 +37,8 @@ type Packet struct {
 }
 
 func (packet Packet) Id() pipeline.PacketId { return packet.id }
+
+func (packet Packet) GetValue(valueName ValueName) (value Value, ok bool) {
+	value, ok = packet.values[valueName]
+	return value, ok
+}

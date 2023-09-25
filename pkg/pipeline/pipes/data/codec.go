@@ -13,7 +13,7 @@ type Codec struct {
 	byteOrder        binary.ByteOrder
 }
 
-func (codec Codec) Decode(id pipeline.PacketId, reader io.Reader) (Packet, int, error) {
+func (codec *Codec) Decode(id pipeline.PacketId, reader io.Reader) (Packet, int, error) {
 	structure, ok := codec.packetStructures[id]
 	if !ok {
 		return Packet{id: id}, 0, ErrIdNotFound(id)
@@ -31,4 +31,28 @@ func (codec Codec) Decode(id pipeline.PacketId, reader io.Reader) (Packet, int, 
 	}
 
 	return packet, totalRead, nil
+}
+
+func (codec *Codec) Encode(packet Packet, writer io.Writer) (int, error) {
+	id := packet.Id()
+
+	structure, ok := codec.packetStructures[id]
+	if !ok {
+		return 0, ErrIdNotFound(id)
+	}
+
+	totalWrite := 0
+	for _, descriptor := range structure {
+		value, ok := packet.GetValue(descriptor.Name)
+		if !ok {
+			return totalWrite, ErrValueNotFound(descriptor.Name)
+		}
+		n, err := codec.encodeNext(descriptor, value, writer)
+		totalWrite += n
+		if err != nil {
+			return totalWrite, err
+		}
+	}
+
+	return totalWrite, nil
 }
