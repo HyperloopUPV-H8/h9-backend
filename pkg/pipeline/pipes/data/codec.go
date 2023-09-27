@@ -24,10 +24,10 @@ func (codec *Codec) Decode(id pipeline.PacketId, reader io.Reader) (Packet, int,
 	for _, descriptor := range structure {
 		value, n, err := codec.decodeNext(descriptor, reader)
 		totalRead += n
+		packet.values[descriptor.Name] = value
 		if err != nil {
 			return packet, totalRead, err
 		}
-		packet.values[descriptor.Name] = value
 	}
 
 	return packet, totalRead, nil
@@ -43,7 +43,7 @@ func (codec *Codec) Encode(packet Packet, writer io.Writer) (int, error) {
 
 	totalWrite := 0
 	for _, descriptor := range structure {
-		value, ok := packet.GetValue(descriptor.Name)
+		value, ok := packet.Value(descriptor.Name)
 		if !ok {
 			return totalWrite, ErrValueNotFound(descriptor.Name)
 		}

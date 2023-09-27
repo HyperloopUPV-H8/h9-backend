@@ -25,3 +25,11 @@ func (pipe Pipe) ReadPacket(id pipeline.PacketId, reader io.Reader) (int, error)
 
 	return 0, nil
 }
+
+func (pipe *Pipe) WritePacket(packet pipeline.Packet, writer io.Writer) (int, error) {
+	return 0, ErrNoEncoding{}
+}
+
+type ErrNoEncoding struct{}
+
+func (err ErrNoEncoding) Error() string { return "Pipe does not support encoding" }
