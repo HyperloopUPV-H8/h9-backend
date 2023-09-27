@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/HyperloopUPV-H8/h9-backend/pkg/pipeline"
+	"github.com/HyperloopUPV-H8/h9-backend/pkg/pipeline/pipes"
 )
 
 type Packet struct {
@@ -27,9 +28,5 @@ func (pipe Pipe) ReadPacket(id pipeline.PacketId, reader io.Reader) (int, error)
 }
 
 func (pipe *Pipe) WritePacket(packet pipeline.Packet, writer io.Writer) (int, error) {
-	return 0, ErrNoEncoding{}
+	return 0, pipes.ErrNoEncoding{}
 }
-
-type ErrNoEncoding struct{}
-
-func (err ErrNoEncoding) Error() string { return "Pipe does not support encoding" }

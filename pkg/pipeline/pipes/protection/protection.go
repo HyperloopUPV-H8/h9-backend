@@ -1,4 +1,4 @@
-package info
+package protection
 
 import (
 	"encoding/binary"
@@ -10,8 +10,8 @@ import (
 )
 
 type Pipe struct {
-	byteOrder binary.ByteOrder
 	output    chan<- pipeline.Packet
+	byteOrder binary.ByteOrder
 }
 
 func (pipe *Pipe) SetOutput(output chan<- pipeline.Packet) { pipe.output = output }
