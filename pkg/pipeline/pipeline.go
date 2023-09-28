@@ -68,9 +68,14 @@ func (mux *Mux) readNextPacket(reader io.Reader) (int, error) {
 	}
 
 	nextId := PacketId(mux.byteOrder.Uint16(idBuf))
-	// FIXME: Check if id or kind exists in maps
-	kind := mux.idToKind[nextId]
-	pipe := mux.pipes[kind]
+	kind, ok := mux.idToKind[nextId]
+	if !ok {
+		return totalRead, ErrIdNotFound(nextId)
+	}
+	pipe, ok := mux.pipes[kind]
+	if !ok {
+		return totalRead, ErrKindNotFound(kind)
+	}
 
 	n, err = pipe.ReadPacket(nextId, reader)
 	totalRead += n
@@ -79,8 +84,13 @@ func (mux *Mux) readNextPacket(reader io.Reader) (int, error) {
 }
 
 func (mux *Mux) WritePacket(packet Packet, writer io.Writer) (int, error) {
-	// FIXME: Check if id or kind exists in maps
-	kind := mux.idToKind[packet.Id()]
-	pipe := mux.pipes[kind]
+	kind, ok := mux.idToKind[packet.Id()]
+	if !ok {
+		return 0, ErrIdNotFound(packet.Id())
+	}
+	pipe, ok := mux.pipes[kind]
+	if !ok {
+		return 0, ErrKindNotFound(kind)
+	}
 	return pipe.WritePacket(packet, writer)
 }
