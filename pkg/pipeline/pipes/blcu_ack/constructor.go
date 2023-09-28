@@ -1,7 +1,5 @@
 package blcu_ack
 
 func NewPipe() Pipe {
-	return Pipe{
-		// TODO
-	}
+	return Pipe{}
 }

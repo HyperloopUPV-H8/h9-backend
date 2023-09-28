@@ -1,7 +1,7 @@
 package info
 
-func NewPipe() Pipe {
-	return Pipe{
-		// TODO
-	}
+import "encoding/binary"
+
+func NewPipe(byteOrder binary.ByteOrder) Pipe {
+	return Pipe{byteOrder: byteOrder}
 }
