@@ -177,6 +177,8 @@ func main() {
 	go startOrderRoutine(orderChannel, &vehicle, &loggerHandler)
 
 	go func() {
+		ade.Boardsdfassdf
+
 		for order := range vehicleTransmittedOrders {
 			loggable := order_logger.LoggableTransmittedOrder(order)
 			loggerHandler.Log(loggable)
