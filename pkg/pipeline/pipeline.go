@@ -94,3 +94,8 @@ func (mux *Mux) WritePacket(packet Packet, writer io.Writer) (int, error) {
 	}
 	return pipe.WritePacket(packet, writer)
 }
+
+func (mux *Mux) GetPipe(kind Kind) (Pipeline, bool) {
+	pipe, ok := mux.pipes[kind]
+	return pipe, ok
+}
