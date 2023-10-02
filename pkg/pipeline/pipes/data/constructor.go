@@ -12,10 +12,34 @@ func NewPipe(codec *Codec) Pipe {
 	}
 }
 
-func NewCodec(structures map[pipeline.PacketId]PacketStructure, enums map[ValueName]EnumDescriptor, byteOrder binary.ByteOrder) Codec {
+func NewCodec(byteOrder binary.ByteOrder) Codec {
 	return Codec{
-		packetStructures: structures,
-		enums:            enums,
+		packetStructures: make(map[pipeline.PacketId]PacketStructure),
+		enums:            make(map[ValueName]EnumDescriptor),
 		byteOrder:        byteOrder,
 	}
+}
+
+func (codec *Codec) AddStructure(id pipeline.PacketId, structure PacketStructure) {
+	codec.packetStructures[id] = structure
+}
+
+func (codec *Codec) RemoveStructure(id pipeline.PacketId) {
+	delete(codec.packetStructures, id)
+}
+
+func (codec *Codec) ClearStructures() {
+	codec.packetStructures = make(map[pipeline.PacketId]PacketStructure)
+}
+
+func (codec *Codec) AddEnum(name ValueName, descriptor EnumDescriptor) {
+	codec.enums[name] = descriptor
+}
+
+func (codec *Codec) RemoveEnum(name ValueName) {
+	delete(codec.enums, name)
+}
+
+func (codec *Codec) ClearEnums() {
+	codec.enums = make(map[ValueName]EnumDescriptor)
 }
