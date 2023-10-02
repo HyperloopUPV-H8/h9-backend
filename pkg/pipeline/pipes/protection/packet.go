@@ -1,6 +1,8 @@
 package protection
 
 import (
+	"encoding/json"
+
 	"github.com/HyperloopUPV-H8/h9-backend/pkg/pipeline"
 )
 
@@ -22,6 +24,8 @@ type Packet struct {
 	Protection Details   `json:"protection"`
 }
 
+func (packet Packet) Id() pipeline.PacketId { return packet.id }
+
 type Name string
 type Type string
 
@@ -31,7 +35,57 @@ type Details struct {
 	Data Data `json:"data"`
 }
 
-func (packet Packet) Id() pipeline.PacketId { return packet.id }
+type detailsAdapter struct {
+	Name Name            `json:"name"`
+	Type Type            `json:"type"`
+	Data json.RawMessage `json:"data"`
+}
+
+func (details *Details) UnmarshalJSON(data []byte) error {
+	var adapter detailsAdapter
+	err := json.Unmarshal(data, &adapter)
+	if err != nil {
+		return err
+	}
+
+	var protection Data
+	switch adapter.Type {
+	case OutOfBounds{}.Type():
+		var outOfBounds OutOfBounds
+		err = json.Unmarshal(adapter.Data, &outOfBounds)
+		protection = outOfBounds
+	case LowerBound{}.Type():
+		var lowerBound LowerBound
+		err = json.Unmarshal(adapter.Data, &lowerBound)
+		protection = lowerBound
+	case UpperBound{}.Type():
+		var upperBound UpperBound
+		err = json.Unmarshal(adapter.Data, &upperBound)
+		protection = upperBound
+	case Equals{}.Type():
+		var equals Equals
+		err = json.Unmarshal(adapter.Data, &equals)
+		protection = equals
+	case NotEquals{}.Type():
+		var notEquals NotEquals
+		err = json.Unmarshal(adapter.Data, &notEquals)
+		protection = notEquals
+	case TimeAccumulation{}.Type():
+		var timeAccumulation TimeAccumulation
+		err = json.Unmarshal(adapter.Data, &timeAccumulation)
+		protection = timeAccumulation
+	case ErrorHandler("").Type():
+		var errorHandler ErrorHandler
+		err = json.Unmarshal(adapter.Data, &errorHandler)
+		protection = errorHandler
+	}
+
+	details.Name = adapter.Name
+	details.Type = adapter.Type
+	details.Data = protection
+
+	return err
+}
 
 type Data interface {
 	Type() Type
