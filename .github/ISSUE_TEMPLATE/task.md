@@ -1,6 +1,6 @@
 ---
 name: Task
-about: Task that will be asigned to a member
+about: Tasks are units of work assigned to members to be completed.
 title: ''
 labels: Task
 assignees: ''
@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 **Description**
-*Brief description of the task and important details*
+Brief description of the task and important details
 
 **Related**
-*Related Issues, PRs, Documents, etc.*
+Related Issues, PRs, Documents, etc.
 
 **Notes**
-*Extra information that might be good to know about it*
+Extra information that might be good to know about it
