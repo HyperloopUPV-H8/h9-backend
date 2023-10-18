@@ -9,9 +9,9 @@ import (
 	"github.com/fatih/color"
 
 	ade_linter "github.com/HyperloopUPV-H8/ade-linter"
-	"github.com/HyperloopUPV-H8/h9-backend/internal/excel_adapter/internals"
-	internalModels "github.com/HyperloopUPV-H8/h9-backend/internal/excel_adapter/internals/models"
-	"github.com/HyperloopUPV-H8/h9-backend/internal/excel_adapter/models"
+	"github.com/HyperloopUPV-H8/h9-backend/pkg/excel_adapter/internals"
+	internalModels "github.com/HyperloopUPV-H8/h9-backend/pkg/excel_adapter/internals/models"
+	"github.com/HyperloopUPV-H8/h9-backend/pkg/excel_adapter/models"
 	trace "github.com/rs/zerolog/log"
 	"github.com/xuri/excelize/v2"
 )

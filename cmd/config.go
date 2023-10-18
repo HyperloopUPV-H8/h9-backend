@@ -4,13 +4,13 @@ import (
 	"github.com/HyperloopUPV-H8/h9-backend/internal/blcu"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/connection_transfer"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/data_transfer"
-	"github.com/HyperloopUPV-H8/h9-backend/internal/excel_adapter"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/file_logger"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/logger_handler"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/message_transfer"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/server"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/value_logger"
 	"github.com/HyperloopUPV-H8/h9-backend/internal/vehicle"
+	"github.com/HyperloopUPV-H8/h9-backend/pkg/excel_adapter"
 )
 
 type Config struct {
