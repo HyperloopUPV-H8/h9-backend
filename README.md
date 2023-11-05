@@ -2,6 +2,8 @@
 
 This is the official backend for the HyperloopUPV verification software *Ethernet View*.
 
+**This repository has been migrated to [this repo monorepo](https://github.com/HyperloopUPV-H8/h9-software) and will continue to receive updates there**
+
 ## Building
 
 The main project file is inside `cmd`, each of the folders contains one version of the backend, the latest is the one with the highest number (so `cmd/MVP-2` is more recent than `cmd/MVP-1`).
