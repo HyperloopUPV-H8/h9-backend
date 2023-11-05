@@ -2,7 +2,7 @@
 
 This is the official backend for the HyperloopUPV verification software *Ethernet View*.
 
-**This repository has been migrated to [this repo monorepo](https://github.com/HyperloopUPV-H8/h9-software) and will continue to receive updates there**
+**This repository has been migrated to [this monorepo](https://github.com/HyperloopUPV-H8/h9-software) and will continue to receive updates there**
 
 ## Building
 
